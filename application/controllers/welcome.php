@@ -9,6 +9,7 @@ class Welcome extends CI_Controller
 	private $style_person;
 	private $style_dni;
 	private $style_foot;
+	private $line_firm;
 	private $fotocheck_border;
 
 	function __construct()
@@ -49,9 +50,9 @@ class Welcome extends CI_Controller
 
 		$this->style_person = array(
 			'font' => array(
-				'size' => 22,
-				'italic' => true
-
+				'size' => 20,
+				'italic' => true,
+				'bold' => true
 			)
 		);
 
@@ -86,6 +87,15 @@ class Welcome extends CI_Controller
 				)
 			)
 		);
+
+		$this->line_firm = array(
+			'borders' => array(
+				'bottom' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+				)
+			)
+		);
+
 	}
 
 	function cell_value_with_merge($cell, $content, $merge)
@@ -101,7 +111,7 @@ class Welcome extends CI_Controller
 				'rotation' => 90
 			),
 			'font' => array(
-				'size' => 36,
+				'size' => 34,
 				'color' => array('rgb' => 'FFFFFF')
 			),
 			'borders' => array(
@@ -229,11 +239,10 @@ class Welcome extends CI_Controller
 		$this->sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);// horizontal
 		$this->sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 		$this->sheet->getDefaultStyle()->getFont()->setName('Calibri');
-		$this->sheet->getDefaultStyle()->getFont()->setSize(10);
 		$this->sheet->getDefaultStyle()->applyFromArray($this->alignment_general);
 		$this->sheet->getSheetView()->setZoomScale(100);
-		$this->sheet->getDefaultColumnDimension()->setWidth(9.2); //default size column
-		$this->sheet->getDefaultRowDimension()->setRowHeight(15);
+		$this->sheet->getDefaultColumnDimension()->setWidth(9.1); //default size column
+		$this->sheet->getDefaultRowDimension()->setRowHeight(13.6);
 
 
 		////////////////////////////////
@@ -255,6 +264,8 @@ class Welcome extends CI_Controller
 				$column_start = 'I';
 				$column_end = 'L';
 				$column_logo = 'J';
+				$column_firm_start = 'J';
+				$column_firm_end = 'K';
 			}
 			else
 			{
@@ -263,13 +274,16 @@ class Welcome extends CI_Controller
 				$column_start = 'C';
 				$column_end = 'F';
 				$column_logo = 'D';
+				$column_firm_start = 'D';
+				$column_firm_end = 'E';
 			}
 
 			////////////////////////////////
 			// SideBar
 			////////////////////////////////
-			$this->cell_value_with_merge( $column_sidebar.$indice, $row['cargo_res'], $column_sidebar.$indice.':'.$column_sidebar.($indice + 23) );
-			$this->sheet->getStyle( $column_sidebar.$indice.':'.$column_sidebar.($indice + 23) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
+			$this->sheet->getColumnDimension($column_sidebar)->setWidth(8);
+			$this->cell_value_with_merge( $column_sidebar.$indice, $row['cargo_res'], $column_sidebar.$indice.':'.$column_sidebar.($indice + 24) );
+			$this->sheet->getStyle( $column_sidebar.$indice.':'.$column_sidebar.($indice + 24) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
 
 			
 
@@ -309,34 +323,44 @@ class Welcome extends CI_Controller
 			// Person
 			////////////////////////////////
 			$names = $indice + 11;
-			$surname = $indice + 12;
+			$last_name_1 = $indice + 12;
+			$last_name_2 = $indice + 13;
 
-			$text_surname = trim( $row['ape_paterno'] ). ' ' . trim( $row['ape_materno'] );
+			// $text_surname = trim( $row['ape_paterno'] ). ' ' . trim( $row['ape_materno'] );
 
-			$this->cell_value_with_merge( $column_start.$names, $row['nombres'], $column_start.$names.':'.$column_end.$names );
-			$this->cell_value_with_merge( $column_start.$surname, $text_surname, $column_start.$surname.':'.$column_end.$surname );
+			$this->cell_value_with_merge( $column_start.$names, trim($row['nombres']), $column_start.$names.':'.$column_end.$names );
+			$this->cell_value_with_merge( $column_start.$last_name_1, trim( $row['ape_paterno'] ), $column_start.$last_name_1.':'.$column_end.$last_name_1 );
+			$this->cell_value_with_merge( $column_start.$last_name_2, trim( $row['ape_materno'] ), $column_start.$last_name_2.':'.$column_end.$last_name_2 );
 
-			$this->sheet->getStyle( $column_start.$names.':'.$column_end.$surname )->applyFromArray( $this->style_person );
+			$this->sheet->getStyle( $column_start.$names.':'.$column_end.$last_name_2 )->applyFromArray( $this->style_person );
 			$this->sheet->getRowDimension($names)->setRowHeight(29);
-			$this->sheet->getRowDimension($surname)->setRowHeight(29);
+			$this->sheet->getRowDimension($last_name_1)->setRowHeight(29);
+			$this->sheet->getRowDimension($last_name_2)->setRowHeight(29);
 
 			// DNI
-			$dni = $indice + 13;
-			$this->cell_value_with_merge( $column_start.$dni, 'DNI N° '.$row['dni'], $column_start.$dni.':'.$column_end.$dni );
+			$dni = $indice + 14;
+			$this->cell_value_with_merge( $column_start.$dni, 'D.N.I. N° '.$row['dni'], $column_start.$dni.':'.$column_end.$dni );
 
 			$this->sheet->getStyle( $column_start.$dni.':'.$column_end.$dni )->applyFromArray( $this->style_dni );
 
 			// Validez
-			$validez = $indice + 14;
-			$this->cell_value_with_merge( $column_start.$validez, 'VÁLIDO: 14 DICIEMBRE DE 2014', $column_start.$validez.':'.$column_end.$validez );
+			$validez = $indice + 15;
+			$this->cell_value_with_merge( $column_start.$validez, 'VÁLIDO: 14 DE DICIEMBRE DE 2014', $column_start.$validez.':'.$column_end.$validez );
 
 
 			////////////////////////////////
 			// foot
 			////////////////////////////////
-			$foot_line1 = $indice + 20;
-			$foot_line2 = $indice + 21;
-			$foot_line3 = $indice + 22;
+			$firm = $indice + 20;
+			$this->sheet->getStyle( $column_firm_start.$firm.':'.$column_firm_end.$firm )->applyFromArray( $this->line_firm );
+
+			$foot_line1 = $indice + 21;
+			$foot_line2 = $indice + 22;
+			$foot_line3 = $indice + 23;
+
+			$this->sheet->getRowDimension($foot_line1)->setRowHeight(10);
+			$this->sheet->getRowDimension($foot_line2)->setRowHeight(10);
+			$this->sheet->getRowDimension($foot_line3)->setRowHeight(10);
 
 			$this->cell_value_with_merge( $column_start.$foot_line1, 'Director', $column_start.$foot_line1.':'.$column_end.$foot_line1 );
 			$this->cell_value_with_merge( $column_start.$foot_line2, 'Oficina Departamental de Estadística e ', $column_start.$foot_line2.':'.$column_end.$foot_line2 );
@@ -352,19 +376,21 @@ class Welcome extends CI_Controller
 			////////////////////////////////
 			// Fondo
 			////////////////////////////////
-			/*$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
 			$objDrawing->setWorksheet($this->sheet);
 			$objDrawing->setName("inei");
 			$objDrawing->setDescription("Inei");
-			$objDrawing->setPath("assets/img/Fondo_Credencial.jpg");
-			$objDrawing->setCoordinates('C'.$indice);
-			// $objDrawing->setWidth(128);
+			$objDrawing->setPath("assets/img/FONDO_INEI.png");
+			$objDrawing->setCoordinates($column_start.$indice);
+			$objDrawing->setResizeProportional(false);
+			$objDrawing->setWidth(255);
+			$objDrawing->setHeight(520);
 			$objDrawing->setOffsetX(0);
-			$objDrawing->setOffsetY(2);*/
+			$objDrawing->setOffsetY(0);
 
 			if ( $contador > 0 && $contador % 2 != 0 )
 			{
-				$indice = $indice + 29;
+				$indice = $indice + 34;
 			}
 
 			$contador++;
