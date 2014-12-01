@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('Convert_UTF8');
+$autoload['libraries'] = array('database','Convert_UTF8');
 
 
 /*
