@@ -241,21 +241,37 @@ class Welcome extends CI_Controller
 		////////////////////////////////
 
 		$indice = 2; //fila inicial
+		$contador = 0;
 
 		$sql = $variable_array['sql'];
 		$query = $this->convert_utf8->convert_result( $this->fotocheck_model->only_query( $sql ) );
 
 		foreach ($query as $key => $row) 
 		{
+			if ( $contador % 2 != 0 )
+			{
+				//impar
+				$column_sidebar = 'H'; 
+				$column_start = 'I';
+				$column_end = 'L';
+				$column_logo = 'J';
+			}
+			else
+			{
+				//par
+				$column_sidebar = 'B';
+				$column_start = 'C';
+				$column_end = 'F';
+				$column_logo = 'D';
+			}
 
 			////////////////////////////////
 			// SideBar
 			////////////////////////////////
-			$this->cell_value_with_merge( 'B'.$indice, $row['cargo_res'], 'B'.$indice.':B'.($indice + 23) );
-			$this->sheet->getStyle( 'B'.$indice.':B'.($indice + 23) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
+			$this->cell_value_with_merge( $column_sidebar.$indice, $row['cargo_res'], $column_sidebar.$indice.':'.$column_sidebar.($indice + 23) );
+			$this->sheet->getStyle( $column_sidebar.$indice.':'.$column_sidebar.($indice + 23) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
 
 			
-
 
 			////////////////////////////////
 			// Logo
@@ -265,7 +281,7 @@ class Welcome extends CI_Controller
 			$objDrawing->setName("inei");
 			$objDrawing->setDescription("Inei");
 			$objDrawing->setPath("assets/img/inei.jpeg");
-			$objDrawing->setCoordinates('D'.$indice);
+			$objDrawing->setCoordinates($column_logo.$indice);
 			$objDrawing->setWidth(128);
 			$objDrawing->setOffsetX(0);
 			$objDrawing->setOffsetY(2);
@@ -279,15 +295,15 @@ class Welcome extends CI_Controller
 			$title_line3 = $indice + 7;
 			$title_line4 = $indice + 8;
 
-			$this->cell_value_with_merge( 'C'.$title_line1, 'EVALUACIÓN DEL CONCURSO PARA EL ', 'C'.$title_line1.':F'.$title_line1 );
+			$this->cell_value_with_merge( $column_start.$title_line1, 'EVALUACIÓN DEL CONCURSO PARA EL ', $column_start.$title_line1.':'.$column_end.$title_line1 );
 
-			$this->cell_value_with_merge( 'C'.$title_line2, 'ACCESO A CARGOS DE DIRECTOR O SUB ', 'C'.$title_line2.':F'.$title_line2 );
+			$this->cell_value_with_merge( $column_start.$title_line2, 'ACCESO A CARGOS DE DIRECTOR O SUB ', $column_start.$title_line2.':'.$column_end.$title_line2 );
 
-			$this->cell_value_with_merge( 'C'.$title_line3, 'DIRECTOR DE INSTITUCIONES ', 'C'.$title_line3.':F'.$title_line3 );
+			$this->cell_value_with_merge( $column_start.$title_line3, 'DIRECTOR DE INSTITUCIONES ', $column_start.$title_line3.':'.$column_end.$title_line3 );
 
-			$this->cell_value_with_merge( 'C'.$title_line4, 'EDUCATIVAS PÚBLICAS', 'C'.$title_line4.':F'.$title_line4 );
+			$this->cell_value_with_merge( $column_start.$title_line4, 'EDUCATIVAS PÚBLICAS', $column_start.$title_line4.':'.$column_end.$title_line4 );
 
-			$this->sheet->getStyle( 'C'.$title_line1.':F'.$title_line4 )->applyFromArray( $this->style_head );
+			$this->sheet->getStyle( $column_start.$title_line1.':'.$column_end.$title_line4 )->applyFromArray( $this->style_head );
 
 			////////////////////////////////
 			// Person
@@ -297,22 +313,22 @@ class Welcome extends CI_Controller
 
 			$text_surname = trim( $row['ape_paterno'] ). ' ' . trim( $row['ape_materno'] );
 
-			$this->cell_value_with_merge( 'C'.$names, $row['nombres'], 'C'.$names.':F'.$names );
-			$this->cell_value_with_merge( 'C'.$surname, $text_surname, 'C'.$surname.':F'.$surname );
+			$this->cell_value_with_merge( $column_start.$names, $row['nombres'], $column_start.$names.':'.$column_end.$names );
+			$this->cell_value_with_merge( $column_start.$surname, $text_surname, $column_start.$surname.':'.$column_end.$surname );
 
-			$this->sheet->getStyle( 'C'.$names.':F'.$surname )->applyFromArray( $this->style_person );
+			$this->sheet->getStyle( $column_start.$names.':'.$column_end.$surname )->applyFromArray( $this->style_person );
 			$this->sheet->getRowDimension($names)->setRowHeight(29);
 			$this->sheet->getRowDimension($surname)->setRowHeight(29);
 
 			// DNI
 			$dni = $indice + 13;
-			$this->cell_value_with_merge( 'C'.$dni, 'DNI N° '.$row['dni'], 'C'.$dni.':F'.$dni );
+			$this->cell_value_with_merge( $column_start.$dni, 'DNI N° '.$row['dni'], $column_start.$dni.':'.$column_end.$dni );
 
-			$this->sheet->getStyle( 'C'.$dni.':F'.$dni )->applyFromArray( $this->style_dni );
+			$this->sheet->getStyle( $column_start.$dni.':'.$column_end.$dni )->applyFromArray( $this->style_dni );
 
 			// Validez
 			$validez = $indice + 14;
-			$this->cell_value_with_merge( 'C'.$validez, 'VÁLIDO: 14 DICIEMBRE DE 2014', 'C'.$validez.':F'.$validez );
+			$this->cell_value_with_merge( $column_start.$validez, 'VÁLIDO: 14 DICIEMBRE DE 2014', $column_start.$validez.':'.$column_end.$validez );
 
 
 			////////////////////////////////
@@ -322,16 +338,16 @@ class Welcome extends CI_Controller
 			$foot_line2 = $indice + 21;
 			$foot_line3 = $indice + 22;
 
-			$this->cell_value_with_merge( 'C'.$foot_line1, 'Director', 'C'.$foot_line1.':F'.$foot_line1 );
-			$this->cell_value_with_merge( 'C'.$foot_line2, 'Oficina Departamental de Estadística e ', 'C'.$foot_line2.':F'.$foot_line2 );
-			$this->cell_value_with_merge( 'C'.$foot_line3, 'Informática', 'C'.$foot_line3.':F'.$foot_line3 );
+			$this->cell_value_with_merge( $column_start.$foot_line1, 'Director', $column_start.$foot_line1.':'.$column_end.$foot_line1 );
+			$this->cell_value_with_merge( $column_start.$foot_line2, 'Oficina Departamental de Estadística e ', $column_start.$foot_line2.':'.$column_end.$foot_line2 );
+			$this->cell_value_with_merge( $column_start.$foot_line3, 'Informática', $column_start.$foot_line3.':'.$column_end.$foot_line3 );
 
 
-			$this->sheet->getStyle( 'C'.$foot_line1.':F'.$foot_line3 )->applyFromArray( $this->style_foot );
+			$this->sheet->getStyle( $column_start.$foot_line1.':'.$column_end.$foot_line3 )->applyFromArray( $this->style_foot );
 
 			$end_foot = $foot_line3 + 1;
 
-			$this->sheet->getStyle( 'C'.$indice.':F'.$end_foot )->applyFromArray( $this->fotocheck_border );
+			$this->sheet->getStyle( $column_start.$indice.':'.$column_end.$end_foot )->applyFromArray( $this->fotocheck_border );
 
 			////////////////////////////////
 			// Fondo
@@ -345,6 +361,13 @@ class Welcome extends CI_Controller
 			// $objDrawing->setWidth(128);
 			$objDrawing->setOffsetX(0);
 			$objDrawing->setOffsetY(2);*/
+
+			if ( $contador > 0 && $contador % 2 != 0 )
+			{
+				$indice = $indice + 29;
+			}
+
+			$contador++;
 
 		}
 
