@@ -128,7 +128,7 @@ class Welcome extends CI_Controller
 		return $this->style_sidebar;
 	}
 
-	public function generate()
+	public function generate( $cod_sede_operativa )
 	{
 		////////////////////////////////
 		//Colores y Estilos
@@ -140,7 +140,7 @@ class Welcome extends CI_Controller
 		// Sheet 1
 		////////////////////////////////
 		$nro_sheet = 0;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 1 ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 1 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '366092';
 		$name_sheet = 'APLICADOR';
 
@@ -153,7 +153,7 @@ class Welcome extends CI_Controller
 		// Sheet 2
 		////////////////////////////////
 		$nro_sheet = 1;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 2 ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 2 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '948A54';
 		$name_sheet = 'ORIENTADOR';
 
@@ -166,7 +166,7 @@ class Welcome extends CI_Controller
 		// Sheet 3
 		////////////////////////////////
 		$nro_sheet = 2;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 3 ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 3 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '31869B';
 		$name_sheet = 'ACL';
 
@@ -179,7 +179,7 @@ class Welcome extends CI_Controller
 		// Sheet 4
 		////////////////////////////////
 		$nro_sheet = 3;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 4 ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 4 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '538DD5';
 		$name_sheet = 'INFORMATICO';
 
@@ -192,7 +192,7 @@ class Welcome extends CI_Controller
 		// Sheet 5
 		////////////////////////////////
 		$nro_sheet = 4;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 5 ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 5 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '60497A';
 		$name_sheet = 'OPERADOR';
 
@@ -380,7 +380,7 @@ class Welcome extends CI_Controller
 			$objDrawing->setWorksheet($this->sheet);
 			$objDrawing->setName("inei");
 			$objDrawing->setDescription("Inei");
-			$objDrawing->setPath("assets/img/FONDO_INEI.png");
+			$objDrawing->setPath("assets/img/FONDO_INEI3.png");
 			$objDrawing->setCoordinates($column_start.$indice);
 			$objDrawing->setResizeProportional(false);
 			$objDrawing->setWidth(255);
