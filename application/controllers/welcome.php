@@ -40,7 +40,7 @@ class Welcome extends CI_Controller
 
 		$this->style_head = array(
 			'alignment' => array(
-				'vertical' => PHPExcel_Style_Alignment::VERTICAL_BOTTOM	
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_BOTTOM
 			),
 			'font' => array(
 				'name' => 'Arial',
@@ -49,8 +49,13 @@ class Welcome extends CI_Controller
 		);
 
 		$this->style_person = array(
+			'alignment' => array(
+				'wrap' => true,
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+			),
 			'font' => array(
-				'size' => 20,
+				'size' => 16,
 				'italic' => true,
 				'bold' => true
 			)
@@ -111,7 +116,7 @@ class Welcome extends CI_Controller
 				'rotation' => 90
 			),
 			'font' => array(
-				'size' => 34,
+				'size' => 33,
 				'color' => array('rgb' => 'FFFFFF')
 			),
 			'borders' => array(
@@ -326,11 +331,12 @@ class Welcome extends CI_Controller
 			$last_name_1 = $indice + 12;
 			$last_name_2 = $indice + 13;
 
-			// $text_surname = trim( $row['ape_paterno'] ). ' ' . trim( $row['ape_materno'] );
+			$text_names =  trim( $row['nombres'] ).', '.trim( $row['ape_paterno'] ). ' ' .trim( $row['ape_materno'] );
 
-			$this->cell_value_with_merge( $column_start.$names, trim($row['nombres']), $column_start.$names.':'.$column_end.$names );
+			/*$this->cell_value_with_merge( $column_start.$names, trim($row['nombres']), $column_start.$names.':'.$column_end.$names );
 			$this->cell_value_with_merge( $column_start.$last_name_1, trim( $row['ape_paterno'] ), $column_start.$last_name_1.':'.$column_end.$last_name_1 );
-			$this->cell_value_with_merge( $column_start.$last_name_2, trim( $row['ape_materno'] ), $column_start.$last_name_2.':'.$column_end.$last_name_2 );
+			$this->cell_value_with_merge( $column_start.$last_name_2, trim( $row['ape_materno'] ), $column_start.$last_name_2.':'.$column_end.$last_name_2 );*/
+			$this->cell_value_with_merge( $column_start.$names, $text_names, $column_start.$names.':'.$column_end.$last_name_2 );
 
 			$this->sheet->getStyle( $column_start.$names.':'.$column_end.$last_name_2 )->applyFromArray( $this->style_person );
 			$this->sheet->getRowDimension($names)->setRowHeight(29);
