@@ -116,7 +116,7 @@ class Welcome extends CI_Controller
 				'rotation' => 90
 			),
 			'font' => array(
-				'size' => 33,
+				'size' => 29,
 				'color' => array('rgb' => 'FFFFFF')
 			),
 			'borders' => array(
@@ -287,8 +287,8 @@ class Welcome extends CI_Controller
 			// SideBar
 			////////////////////////////////
 			$this->sheet->getColumnDimension($column_sidebar)->setWidth(8);
-			$this->cell_value_with_merge( $column_sidebar.$indice, $row['cargo_res'], $column_sidebar.$indice.':'.$column_sidebar.($indice + 24) );
-			$this->sheet->getStyle( $column_sidebar.$indice.':'.$column_sidebar.($indice + 24) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
+			$this->cell_value_with_merge( $column_sidebar.$indice, $row['cargo_res'], $column_sidebar.$indice.':'.$column_sidebar.($indice + 22) );
+			$this->sheet->getStyle( $column_sidebar.$indice.':'.$column_sidebar.($indice + 22) )->applyFromArray( $this->sidebar( $variable_array['back_color'] ) );
 
 			
 
@@ -327,9 +327,9 @@ class Welcome extends CI_Controller
 			////////////////////////////////
 			// Person
 			////////////////////////////////
-			$names = $indice + 11;
-			$last_name_1 = $indice + 12;
-			$last_name_2 = $indice + 13;
+			$names = $indice + 10;
+			$last_name_1 = $indice + 11;
+			$last_name_2 = $indice + 12;
 
 			$text_names =  trim( $row['nombres'] ).', '.trim( $row['ape_paterno'] ). ' ' .trim( $row['ape_materno'] );
 
@@ -344,25 +344,25 @@ class Welcome extends CI_Controller
 			$this->sheet->getRowDimension($last_name_2)->setRowHeight(29);
 
 			// DNI
-			$dni = $indice + 14;
+			$dni = $indice + 13;
 			$this->cell_value_with_merge( $column_start.$dni, 'D.N.I. N° '.$row['dni'], $column_start.$dni.':'.$column_end.$dni );
 
 			$this->sheet->getStyle( $column_start.$dni.':'.$column_end.$dni )->applyFromArray( $this->style_dni );
 
 			// Validez
-			$validez = $indice + 15;
+			$validez = $indice + 14;
 			$this->cell_value_with_merge( $column_start.$validez, 'VÁLIDO: 14 DE DICIEMBRE DE 2014', $column_start.$validez.':'.$column_end.$validez );
 
 
 			////////////////////////////////
 			// foot
 			////////////////////////////////
-			$firm = $indice + 20;
+			$firm = $indice + 18;
 			$this->sheet->getStyle( $column_firm_start.$firm.':'.$column_firm_end.$firm )->applyFromArray( $this->line_firm );
 
-			$foot_line1 = $indice + 21;
-			$foot_line2 = $indice + 22;
-			$foot_line3 = $indice + 23;
+			$foot_line1 = $indice + 19;
+			$foot_line2 = $indice + 20;
+			$foot_line3 = $indice + 21;
 
 			$this->sheet->getRowDimension($foot_line1)->setRowHeight(10);
 			$this->sheet->getRowDimension($foot_line2)->setRowHeight(10);
@@ -389,8 +389,8 @@ class Welcome extends CI_Controller
 			$objDrawing->setPath("assets/img/FONDO_INEI3.png");
 			$objDrawing->setCoordinates($column_start.$indice);
 			$objDrawing->setResizeProportional(false);
-			$objDrawing->setWidth(255);
-			$objDrawing->setHeight(520);
+			$objDrawing->setWidth(256);
+			$objDrawing->setHeight(482);
 			$objDrawing->setOffsetX(0);
 			$objDrawing->setOffsetY(0);
 
