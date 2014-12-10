@@ -8,6 +8,7 @@ class Welcome extends CI_Controller
 	private $style_head;
 	private $style_person;
 	private $style_dni;
+	private $style_sede;
 	private $style_foot;
 	private $line_firm;
 	private $fotocheck_border;
@@ -65,7 +66,14 @@ class Welcome extends CI_Controller
 			'font' => array(
 				'italic' => true,
 				'bold' => true
+			)
+		);
 
+		$this->style_sede = array(
+			'font' => array(
+				'italic' => true,
+				'bold' => true,
+				'size' => 12
 			)
 		);
 
@@ -145,7 +153,7 @@ class Welcome extends CI_Controller
 		// Sheet 1
 		////////////////////////////////
 		$nro_sheet = 0;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 1 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, p.sede_operativa, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 1 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '366092';
 		$name_sheet = 'APLICADOR';
 
@@ -158,7 +166,7 @@ class Welcome extends CI_Controller
 		// Sheet 2
 		////////////////////////////////
 		$nro_sheet = 1;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 2 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, p.sede_operativa, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 2 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '948A54';
 		$name_sheet = 'ORIENTADOR';
 
@@ -171,7 +179,7 @@ class Welcome extends CI_Controller
 		// Sheet 3
 		////////////////////////////////
 		$nro_sheet = 2;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 3 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, p.sede_operativa, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 3 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '31869B';
 		$name_sheet = 'ACL';
 
@@ -184,7 +192,7 @@ class Welcome extends CI_Controller
 		// Sheet 4
 		////////////////////////////////
 		$nro_sheet = 3;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 4 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, p.sede_operativa, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 4 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '538DD5';
 		$name_sheet = 'INFORMATICO';
 
@@ -197,7 +205,7 @@ class Welcome extends CI_Controller
 		// Sheet 5
 		////////////////////////////////
 		$nro_sheet = 4;
-		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 5 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
+		$sql = "SELECT p.dni, p.ape_paterno, p.ape_materno, p.nombres, p.sede_operativa, c.id_cargo, c.cargo, c.cargo_res FROM PERSONAL p INNER JOIN CARGO c ON p.id_cargo = c.id_cargo WHERE c.id_cargo = 5 and p.cod_sede_operativa = $cod_sede_operativa ORDER BY p.ape_paterno ASC";
 		$back_color = '60497A';
 		$name_sheet = 'OPERADOR';
 
@@ -205,6 +213,10 @@ class Welcome extends CI_Controller
 
 		$this->sheet_base( $valores );
 
+		if ( strlen( trim($cod_sede_operativa) ) == 1 ) 
+		{
+			$cod_sede_operativa = '0'.$cod_sede_operativa;
+		}
 
 		
 		$this->phpexcel->getProperties()
@@ -213,7 +225,7 @@ class Welcome extends CI_Controller
 
 
 		header("Content-Type: application/vnd.ms-excel");
-		$nombreArchivo = 'FOTOCHECK_'.date('Y-m-d');
+		$nombreArchivo =  $cod_sede_operativa.'-FOTOCHECK_'.date('Y-m-d');
 		header("Content-Disposition: attachment; filename=\"$nombreArchivo.xls\""); 
 		header("Cache-Control: max-age=0");
 		
@@ -331,7 +343,8 @@ class Welcome extends CI_Controller
 			$last_name_1 = $indice + 11;
 			$last_name_2 = $indice + 12;
 
-			$text_names =  trim( $row['nombres'] ).', '.trim( $row['ape_paterno'] ). ' ' .trim( $row['ape_materno'] );
+			// $text_names =  trim( $row['nombres'] ).', '.trim( $row['ape_paterno'] ). ' ' .trim( $row['ape_materno'] );
+			$text_names =  trim( $row['nombres'] );
 
 			/*$this->cell_value_with_merge( $column_start.$names, trim($row['nombres']), $column_start.$names.':'.$column_end.$names );
 			$this->cell_value_with_merge( $column_start.$last_name_1, trim( $row['ape_paterno'] ), $column_start.$last_name_1.':'.$column_end.$last_name_1 );
@@ -353,6 +366,11 @@ class Welcome extends CI_Controller
 			$validez = $indice + 14;
 			$this->cell_value_with_merge( $column_start.$validez, 'VÁLIDO: 14 DE DICIEMBRE DE 2014', $column_start.$validez.':'.$column_end.$validez );
 
+			// SedeOperativa
+			$sede = $indice + 15;
+			$this->cell_value_with_merge( $column_start.$sede, $row['sede_operativa'], $column_start.$sede.':'.$column_end.$sede );
+
+			$this->sheet->getStyle( $column_start.$sede.':'.$column_end.$sede )->applyFromArray( $this->style_sede );
 
 			////////////////////////////////
 			// foot
