@@ -253,13 +253,23 @@ class Welcome extends CI_Controller
 		////////////////////////////////
 		// Formato de la hoja ( Set Orientation, size and scaling )
 		////////////////////////////////
-		$this->sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);// horizontal
+		$this->sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);// horizontal ORIENTATION_LANDSCAPE
 		$this->sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 		$this->sheet->getDefaultStyle()->getFont()->setName('Calibri');
 		$this->sheet->getDefaultStyle()->applyFromArray($this->alignment_general);
 		$this->sheet->getSheetView()->setZoomScale(100);
 		$this->sheet->getDefaultColumnDimension()->setWidth(9.1); //default size column
 		$this->sheet->getDefaultRowDimension()->setRowHeight(13.6);
+
+		$this->sheet->getColumnDimension('F')->setWidth(5);
+
+		// custom page margins
+		$pageMargins = $this->sheet->getPageMargins();
+		$pageMargins->setTop(0);
+		$pageMargins->setBottom(0);
+		$pageMargins->setLeft(0);
+		$pageMargins->setRight(0);
+		// .custom page margins
 
 
 		////////////////////////////////
@@ -277,22 +287,22 @@ class Welcome extends CI_Controller
 			if ( $contador % 2 != 0 )
 			{
 				//impar
-				$column_sidebar = 'H'; 
-				$column_start = 'I';
-				$column_end = 'L';
-				$column_logo = 'J';
-				$column_firm_start = 'J';
-				$column_firm_end = 'K';
+				$column_sidebar = 'G'; 
+				$column_start = 'H';
+				$column_end = 'K';
+				$column_logo = 'I';
+				$column_firm_start = 'I';
+				$column_firm_end = 'J';
 			}
 			else
 			{
 				//par
-				$column_sidebar = 'B';
-				$column_start = 'C';
-				$column_end = 'F';
-				$column_logo = 'D';
-				$column_firm_start = 'D';
-				$column_firm_end = 'E';
+				$column_sidebar = 'A';
+				$column_start = 'B';
+				$column_end = 'E';
+				$column_logo = 'C';
+				$column_firm_start = 'C';
+				$column_firm_end = 'D';
 			}
 
 			////////////////////////////////
@@ -407,14 +417,14 @@ class Welcome extends CI_Controller
 			$objDrawing->setPath("assets/img/FONDO_INEI3.png");
 			$objDrawing->setCoordinates($column_start.$indice);
 			$objDrawing->setResizeProportional(false);
-			$objDrawing->setWidth(256);
+			$objDrawing->setWidth(255);
 			$objDrawing->setHeight(482);
 			$objDrawing->setOffsetX(0);
 			$objDrawing->setOffsetY(0);
 
 			if ( $contador > 0 && $contador % 2 != 0 )
 			{
-				$indice = $indice + 34;
+				$indice = $indice + 28;
 			}
 
 			$contador++;
